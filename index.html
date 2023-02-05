@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Click and Drag the ball in Canvas</title>
+    <style>
+      #canvas {
+        border: 1px solid black;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas" width="600" height="600"></canvas>
+    <script>
+      const canvas = document.getElementById('canvas');
+      const ctx = canvas.getContext('2d');
+      let x = 50;
+      let y = 50;
+      let isDragging = false;
+
+      function drawBall() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.beginPath();
+        ctx.arc(x, y, 30, 0, Math.PI * 2);
+        ctx.fillStyle = 'red';
+        ctx.fill();
+        ctx.closePath();
+      }
+
+      function drawBasket() {
+        ctx.beginPath();
+        ctx.arc(500, 515, 80, 0, Math.PI * 1);
+        ctx.stroke();
+      }
+
+      canvas.addEventListener('mousedown', (e) => {
+        // let rect = canvas.getBoundingClientRect();
+        let clickX = e.clientX; // - rect.left;
+        let clickY = e.clientY; // - rect.top;
+        if (
+          clickX >= x - 30 &&
+          clickX <= x + 30 &&
+          clickY >= y - 30 &&
+          clickY <= y + 30
+        ) {
+          isDragging = true;
+        }
+      });
+
+      canvas.addEventListener('mouseup', () => {
+        if (x >= 300 && x <= 570 && y >= 300 && y <= 570) {
+          x = 500;
+          y = 563;
+        }
+        isDragging = false;
+        drawBall();
+        drawBasket();
+      });
+
+      canvas.addEventListener('mouseleave', () => {
+        isDragging = false;
+      });
+
+      canvas.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        // let rect = canvas.getBoundingClientRect();
+        x = e.clientX; // - rect.left;
+        y = e.clientY; // - rect.top;
+        drawBall();
+        drawBasket();
+      });
+
+      drawBall();
+      drawBasket();
+    </script>
+  </body>
+</html>
